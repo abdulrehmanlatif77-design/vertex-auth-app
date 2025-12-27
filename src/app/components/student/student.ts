@@ -13,6 +13,7 @@ import { Student } from '../../models/student.model';
   styleUrl: './student.css'
 })
 export class StudentComponent implements OnInit {
+  loading: boolean = true;  
   private authService = inject(AuthService);
   private router = inject(Router);
   private studentService = inject(StudentService);
@@ -21,13 +22,27 @@ export class StudentComponent implements OnInit {
 
   ngOnInit(): void {
     this.studentService.getStudents().subscribe((data: Student[]) => {
-      this.students = data;
-      return this.students;
+    this.students = data;
+    this.loading = false;
     });
   }
 
   onLogout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+    this.loading = false;
+  }
+
+  getDegreeName(degree: number): string {
+    switch (degree) {
+      case 0:
+        return 'BE';
+      case 1:
+        return 'BTech';
+      case 2:
+        return 'MTech';
+      default:
+        return 'Unknown';
+    }
   }
 }

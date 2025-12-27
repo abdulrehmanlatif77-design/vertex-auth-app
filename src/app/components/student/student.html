@@ -1,6 +1,42 @@
 <div class="student-container">
   <div class="content">
-    <h2>Student Page</h2>
-    <p>You have successfully logged in to the application.</p>
+    <h2>Student List</h2>
+
+@if (loading) {
+  <div>Loading...</div>
+} @else if (students.length > 0) {
+  <table class="student-table">
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Middle Initial</th>
+        <th>Date of Birth</th>
+        <th>Gender</th>
+        <th>Address</th>
+        <th>Email Address</th>
+        <th>Enrollment Date</th>
+        <th>Degree</th>
+        <th>GPA</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of students">
+        <td>{{ student.firstName }}</td>
+        <td>{{ student.lastName }}</td>
+        <td>{{ student.middleInitial }}</td>
+        <td>{{ student.dateOfBirth | date:'MM/dd/yyyy' }}</td>
+        <td>{{ student.gender }}</td>
+        <td>{{ student.address }}</td>
+        <td>{{ student.emailAddress }}</td>
+        <td>{{ student.enrollmentDate | date:'MM/dd/yyyy' }}</td>
+        <td>{{ getDegreeName(student.degree) }}</td>
+        <td>{{ student.gpa }}</td>
+      </tr>
+    </tbody>
+  </table>
+} @else {
+  <div>No students found.</div>
+}
   </div>
 </div>

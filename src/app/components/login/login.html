@@ -26,7 +26,9 @@
         {{ isLoading ? 'Logging in...' : 'Login' }}
       </button>
     </form>
-    <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+    @if (errorMessage) {
+      <p class="error-message">{{ errorMessage }}</p>
+    }
     <p class="hint">Demo: username: <strong>user</strong>, password: <strong>password</strong></p>
   </div>
 </div>
