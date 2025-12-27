@@ -5,6 +5,9 @@ import { authGuard } from './guards/auth-guard';
 import { LayoutComponent } from './components/layout/layout';
 
 export const routes: Routes = [
+  // Default redirect to home or login based on auth
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+
   // Public route without layout
   { path: 'login', component: LoginComponent },
 
@@ -12,9 +15,9 @@ export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
+    canActivate: [authGuard],
     children: [
-      { path: 'home', component: HomeComponent, canActivate: [authGuard] },
-      { path: '', redirectTo: 'home', pathMatch: 'full' }
+      { path: 'home', component: HomeComponent }
     ]
   },
 

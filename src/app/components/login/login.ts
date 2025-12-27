@@ -26,7 +26,10 @@ export class LoginComponent {
     this.authService.login(this.username, this.password).then(
       (token: string) => {
         this.isLoading = false;
-        this.router.navigate(['/home']);
+        // Use setTimeout to ensure signal update is processed before navigation
+        setTimeout(() => {
+          this.router.navigate(['/home']);
+        }, 0);
       },
       (error: string) => {
         this.isLoading = false;

@@ -1,5 +1,7 @@
 import { Injectable, signal, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +10,8 @@ export class AuthService {
   isLoggedIn = signal<boolean>(false);
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
+  private http = inject(HttpClient);
+  private apiUrl = 'https://localhost:7239/api/v1/Auth/login';
 
   constructor() {
     // Check if token exists in localStorage on service initialization (only in browser)
@@ -19,21 +23,38 @@ export class AuthService {
     }
   }
 
-  login(username: string, password: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (username === 'user' && password === 'password') {
-          const mockToken = 'mock-jwt-token-' + Date.now();
-          if (this.isBrowser) {
-            localStorage.setItem('auth_token', mockToken);
-          }
-          this.isLoggedIn.set(true);
-          resolve(mockToken);
-        } else {
-          reject('Invalid credentials');
-        }
-      }, 1000);
-    });
+  async login(username: string, password: string): Promise<string> {
+    try {
+      const body = {
+        email: username,
+        password: password
+      };
+
+      const response = await firstValueFrom(
+        this.http.post<any>(this.apiUrl, body)
+      );
+
+      // Try common token property names
+      const token =
+        response?.token ||
+        response?.accessToken ||
+        response?.jwt ||
+        response?.idToken ||
+        response?.data?.token;
+
+      if (!token) {
+        throw new Error('Login succeeded but token was not found in response');
+      }
+
+      if (this.isBrowser) {
+        localStorage.setItem('auth_token', token);
+      }
+      this.isLoggedIn.set(true);
+      return token;
+    } catch (err: any) {
+      const message = err?.error?.message || err?.message || 'Login failed';
+      throw message;
+    }
   }
 
   logout(): void {
