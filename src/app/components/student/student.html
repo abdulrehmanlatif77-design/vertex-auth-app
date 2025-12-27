@@ -21,18 +21,20 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let student of students">
-        <td>{{ student.firstName }}</td>
-        <td>{{ student.lastName }}</td>
-        <td>{{ student.middleInitial }}</td>
-        <td>{{ student.dateOfBirth | date:'MM/dd/yyyy' }}</td>
-        <td>{{ student.gender }}</td>
-        <td>{{ student.address }}</td>
-        <td>{{ student.emailAddress }}</td>
-        <td>{{ student.enrollmentDate | date:'MM/dd/yyyy' }}</td>
-        <td>{{ getDegreeName(student.degree) }}</td>
-        <td>{{ student.gpa }}</td>
-      </tr>
+      @for (student of students; track student.id) {
+        <tr>
+          <td>{{ student.firstName }}</td>
+          <td>{{ student.lastName }}</td>
+          <td>{{ student.middleInitial }}</td>
+          <td>{{ student.dateOfBirth | date:'MM/dd/yyyy' }}</td>
+          <td>{{ student.gender }}</td>
+          <td>{{ student.address }}</td>
+          <td>{{ student.emailAddress }}</td>
+          <td>{{ student.enrollmentDate | date:'MM/dd/yyyy' }}</td>
+          <td>{{ getDegreeName(student.degree) }}</td>
+          <td>{{ student.gpa }}</td>
+        </tr>
+      }
     </tbody>
   </table>
 } @else {
