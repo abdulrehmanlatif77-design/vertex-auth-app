@@ -11,7 +11,8 @@ export class AuthService {
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
   private http = inject(HttpClient);
-  private apiUrl = 'https://localhost:7239/api/v1/Auth/login';
+  // Use dev proxy (/api) to avoid CORS and preflight
+  private apiUrl = '/api/v1/Auth/login';
 
   constructor() {
     // Check if token exists in localStorage on service initialization (only in browser)

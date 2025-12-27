@@ -7,7 +7,8 @@ import { Student } from '../../models/student.model';
   providedIn: 'root',
 })
 export class StudentService {
-  private apiUrl = 'https://localhost:7239/api/v1/Student/getstudents';
+  // Use dev proxy (/api) to avoid CORS and preflight
+  private apiUrl = '/api/v1/Student/getstudents';
   constructor(private http: HttpClient) {}
   getStudents(): Observable<Student[]> {
     return this.http.get<Student[]>(this.apiUrl);
